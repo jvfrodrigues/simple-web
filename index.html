@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        #resultTable {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Query Page</h1>
+        <form id="queryForm">
+            <div class="form-group">
+                <label for="query">Enter SQL Query:</label>
+                <input type="text" class="form-control" id="query" name="query">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <h2>Query Results:</h2>
+        <div class="table-responsive">
+            <table id="resultTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody">
+                    <!-- Results will be displayed here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById("queryForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            var query = document.getElementById("query").value;
+            fetch("/query?q=" + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(data => {
+                    var resultBody = document.getElementById("resultBody");
+                    resultBody.innerHTML = "";
+                    data.forEach(function (item) {
+                        var row = document.createElement("tr");
+                        row.innerHTML = "<td>" + JSON.stringify(item.data) + "</td>";
+                        resultBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
