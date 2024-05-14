@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/marcboeker/go-duckdb"
@@ -26,8 +27,12 @@ func main() {
 	http.HandleFunc("/data", dataHandler)
 	http.HandleFunc("/", indexHandler)
 
-	fmt.Println("Server listening on port 8486...")
-	log.Fatal(http.ListenAndServe(":8486", nil))
+	port, _ := os.LookupEnv("PORT")
+	if port == "" {
+		port = "8486"
+	}
+	fmt.Println("Server listening on port " + port)
+	log.Fatal(http.ListenAndServe(": "+port, nil))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
