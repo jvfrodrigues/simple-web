@@ -1,3 +1,6 @@
+### Cloud
+Running at https://simple-web-go-400d719a9d08.herokuapp.com/
+
 ### Running Locally
 
 #### Requirementes: golang
